@@ -55,7 +55,7 @@ function App() {
   }
 
   return (
-    <div className="p-10">
+    <div className="p-2 md:p-10 min-h-dvh">
       <div>
         <textarea
           type="text"
@@ -67,7 +67,7 @@ function App() {
         <input
           type="submit"
           value="Submit"
-          className="rounded-lg px-4 py-1 font-semibold cursor-pointer active:scale-95 inset-shadow-sm inset-shadow-gray-500/30 shadow-sm shadow-gray-500/30"
+          className="rounded-lg px-4 mt-2 md:mt-5 py-1 font-semibold cursor-pointer active:scale-95 inset-shadow-sm inset-shadow-gray-500/30 shadow-sm shadow-gray-500/30"
           onClick={handleInput}
         />
       </div>
