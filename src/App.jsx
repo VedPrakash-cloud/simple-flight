@@ -9,7 +9,7 @@ function App() {
     const rows = data.split('\n').map(r => r.trim()).filter(l => l !== "");
     let itinerary = [];
     let currentLeg = null;
-
+    
     rows.forEach((line, idx)=>{
       if(line.match(/(Flight\s\d+|Departing\sflight|Returning\sflight)/i)){
         if(currentLeg) itinerary.push(currentLeg);
@@ -52,6 +52,8 @@ function App() {
 
     setFlights(itinerary);
     setData("");
+    console.log(flights);
+    
   }
 
   return (
