@@ -2,59 +2,60 @@ import { useState } from "react";
 import FlightCard from "./card";
 
 function App() {
-  const [data, setData] = useState('');
+  const [data, setData] = useState("");
   const [flights, setFlights] = useState([]);
 
-  const handleInput = ()=>{
-    const rows = data.split('\n').map(r => r.trim()).filter(l => l !== "");
+  const handleInput = () => {
+    const rows = data
+      .split("\n")
+      .map((r) => r.trim())
+      .filter((l) => l !== "");
     let itinerary = [];
     let currentLeg = null;
-    
-    rows.forEach((line, idx)=>{
-      if(line.match(/(Flight\s\d+|Departing\sflight|Returning\sflight)/i)){
-        if(currentLeg) itinerary.push(currentLeg);
-          currentLeg={
+
+    rows.forEach((line, idx) => {
+      if (line.match(/(Flight\s\d+|Departing\sflight|Returning\sflight)/i)) {
+        if (currentLeg) itinerary.push(currentLeg);
+        currentLeg = {
           header: line,
-          date: rows[idx+1],
-          segments:[],
-          totalEmmissions: ""
+          date: rows[idx + 1],
+          segments: [],
+          totalEmmissions: "",
         };
-      }else if(/\d{1,2}:\d{2}\s?[AP]M/i.test(line)){
-        const lastItem = currentLeg?.segments[currentLeg.segments.length-1];
-        
-        if(!lastItem || lastItem.type === 'LAYOVER' || lastItem.arrival){
+      } else if (/\d{1,2}:\d{2}\s?[AP]M/i.test(line)) {
+        const lastItem = currentLeg?.segments[currentLeg.segments.length - 1];
+
+        if (!lastItem || lastItem.type === "LAYOVER" || lastItem.arrival) {
           currentLeg.segments.push({
-            type:"FLIGHT",
+            type: "FLIGHT",
             departure: line,
-            duration:rows[idx + 1],
+            duration: rows[idx + 1],
             arrival: "",
             airline: "",
-            class: ""
+            class: "",
           });
-        } else{
+        } else {
           lastItem.arrival = line;
         }
-      }
-      else if(/(Economy|Business|First|Premium)/i.test(line)){
-        const currentFlight = currentLeg?.segments.find(s => s.type === 'FLIGHT' && !s.class);
-        if(currentFlight){
+      } else if (/(Economy|Business|First|Premium)/i.test(line)) {
+        const currentFlight = currentLeg?.segments.find(
+          (s) => s.type === "FLIGHT" && !s.class,
+        );
+        if (currentFlight) {
           currentFlight.airline = rows[idx - 1];
           currentFlight.class = line;
           currentFlight.flightNo = rows[idx + 1];
         }
-      }
-      else if(line.toLowerCase().includes('layover')){
-        currentLeg?.segments.push({type: 'LAYOVER', content:line});
+      } else if (line.toLowerCase().includes("layover")) {
+        currentLeg?.segments.push({ type: "LAYOVER", content: line });
       }
     });
 
-    if(currentLeg) itinerary.push(currentLeg);
+    if (currentLeg) itinerary.push(currentLeg);
 
     setFlights(itinerary);
     setData("");
-    console.log(flights);
-    
-  }
+  }; 
 
   return (
     <div className="p-2 md:p-10 min-h-dvh">
@@ -74,7 +75,7 @@ function App() {
         />
       </div>
       <div className="my-5">
-        <FlightCard itinerary={flights}/>
+        <FlightCard itinerary={flights} />
       </div>
     </div>
   );
